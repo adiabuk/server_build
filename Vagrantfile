@@ -5,7 +5,11 @@
 # configures the configuration version (we support older styles for
 # backwards compatibility). Please don't change it unless you know what
 # you're doing.
-Vagrant.configure("2") do |config|
+
+VAGRANTFILE_API_VERSION = "2"
+repos = (ENV['repos_dir'].nil?) ? "none" : ENV['repos_dir']
+
+Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   # The most common configuration options are documented and commented below.
   # For a complete reference, please see the online documentation at
   # https://docs.vagrantup.com.
@@ -13,7 +17,13 @@ Vagrant.configure("2") do |config|
   # Every Vagrant development environment requires a box. You can search for
   # boxes at https://atlas.hashicorp.com/search.
   config.vm.define "node" do |node|
+    usage = "Usage: repos_dir='<dir>' vagrant up node"
+    abort(usage) if (repos == 'none' && ARGV[0] == "up")
+
     node.vm.box = "ubuntu/xenial64"
+    node.vm.hostname = "node"
+    node.vm.synced_folder repos, "/repos" if (ARGV[0] == "up")
+    node.vm.synced_folder "~/.ssh", "/home/vagrant/ssh"
 
   # Disable automatic box update checking. If you disable this, then
   # boxes will only be checked for updates when the user runs

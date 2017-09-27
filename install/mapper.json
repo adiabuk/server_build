@@ -1,0 +1,5 @@
+{
+    "../configs/default": "/etc/nginx/sites-enabled/default",
+    "../configs/nginx.conf": "/etc/nginx/nginx.conf",
+    "../configs/mongodb.conf": "/etc/mongodb.conf"
+ }
